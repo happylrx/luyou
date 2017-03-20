@@ -10,21 +10,23 @@ class Home extends React.Component{
     }
   }
   componentWillMount(){
-      axios.get("http://api.duopingshidai.com/category")
-        .then((res)=>this.setState({cats:res.data.categories}))
-        .catch(err=>console.log(err))
+      this.getSubmit()
     }
   handleSubmit(e){
     e.preventDefault();
     const name=this.refs.name.value;
       axios.post(`http://api.duopingshidai.com/category`,{name}).then((res)=>{
-        console.log(res);
-        this.setState({cats:res.data.category.name})
+        {console.log(res),
+        this.getSubmit()}
      })
     }
     handledelete(_id){
-      axios.delete(`http://api.duopingshidai.com/category?id=${_id}`).then( res =>console.log(res) )
-
+      axios.delete(`http://api.duopingshidai.com/category?id=${_id}`).then( res =>this.getSubmit() )
+    }
+    getSubmit(){
+      axios.get("http://api.duopingshidai.com/category")
+        .then((res)=>this.setState({cats:res.data.categories}))
+        .catch(err=>console.log(err))
     }
   render(){
     let catList = this.state.cats.map(item => <li key={Math.random()}>{item.name}<button onClick={this.handledelete.bind(this,item._id)}>删除</button></li>);
